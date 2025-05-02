@@ -35,12 +35,34 @@ function setup() {
   let y = (windowHeight - height) / 2;
   c.position(x, y);
   select('body').style('background-color', '#FFFA1D');
-  levels = parseInt(localStorage.getItem('levels')) || 1;
-  highpoints = parseInt(localStorage.getItem('highpoints')) || 0;
+
+  if (username) {
+    levels = parseInt(localStorage.getItem(`${username}_levels`)) || 1;
+    highpoints = parseInt(localStorage.getItem(`${username}_highpoints`)) || 0;
+  } else {
+    levels = 1;
+    highpoints = 0;
+  }
   startScreen = 1;
   gameStarted = false;
   console.log("Setup completed. Start screen:", startScreen, "Game started:", gameStarted);
 }
+
+window.startGameAfterLogin = function(user) {
+  console.log("Starting game after login...");
+  username = user;
+  levels = parseInt(localStorage.getItem(`${username}_levels`)) || 1;
+  highpoints = parseInt(localStorage.getItem(`${username}_highpoints`)) || 0;
+  InLogged = 1; 
+  startGame();
+}
+
+window.addEventListener('beforeunload', function() {
+  if (username) {
+    localStorage.setItem(`${username}_levels`, levels);
+    localStorage.setItem(`${username}_highpoints`, highpoints);
+  }
+});
 
 function draw() {
   background(0); 
